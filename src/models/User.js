@@ -30,4 +30,33 @@ const createUser = async (user) => {
         .query("INSERT INTO users (username, email, password, display_name, bio, created_at) VALUES (@username, @email, @password, @display_name, @bio, @created_at)")
 }
 
-module.exports = { findUserByUsernameOrEmail, findUserByUsername, createUser }
+const getUserProfile = async (userId) => {
+    const pool = await poolPromise
+    const result = await pool.request()
+        .input("userId", userId)
+        .query(`
+            SELECT id, username, display_name, bio
+            FROM users
+            WHERE id = @userId
+        `)
+
+    return result.recordset[0]
+}
+
+const updateUserProfile = async (userId, { display_name, bio }) => {
+    const pool = await poolPromise
+    const result = await pool.request()
+        .input("userId", userId)
+        .input("display_name", display_name || null)
+        .input("bio", bio || null)
+        .query(`
+            UPDATE users
+            SET display_name = COALESCE(@display_name, display_name),
+                bio = COALESCE(@bio, bio)
+            WHERE id = @userId
+        `)
+
+    return result.rowsAffected[0] > 0
+}
+
+module.exports = { findUserByUsernameOrEmail, findUserByUsername, createUser, getUserProfile, updateUserProfile }

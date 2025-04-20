@@ -1,4 +1,4 @@
-const { getAllFilms, getFilmById, addFilm, deleteFilm } = require("../models/Film")
+const { getAllFilms, getFilmById, addFilm, deleteFilm, addFilmImages, updateFilmImages } = require("../models/Film")
 const { getGenreByName, addGenre } = require("../models/Genre")
 const { addFilmGenre, deleteFilmGenres } = require("../models/FilmGenre")
 
@@ -31,7 +31,7 @@ const getFilmsByGenreController = async (req, res) => {
     const { genre } = req.params
 
     try {
-        let films;
+        let films
         if (genre) {
             const genreIds = genre.split(",").map(id => parseInt(id.trim()))
             films = await getFilmsByGenres(genreIds)
@@ -39,22 +39,41 @@ const getFilmsByGenreController = async (req, res) => {
             films = await getAllFilms()
         }
 
-        res.status(200).json(films);
+        res.status(200).json(films)
     } catch (err) {
-        console.error("Error fetching films by genre:", err);
-        res.status(500).json({ message: "Internal server error" });
+        console.error("Error fetching films by genre:", err)
+        res.status(500).json({ message: "Internal server error" })
     }
-};
+}
 
-const addFilmController = async (req, res) => {
-    const { title, synopsis, status, total_episodes, release_date, genres } = req.body
+const searchFilmsByTitleController = async (req, res) => {
+    const { title } = req.query
 
-    if (!title || !synopsis || !status || !total_episodes || !release_date || !genres || !Array.isArray(genres)) {
-        return res.status(400).json({ message: "Please fill all fields and provide genres as an array of names" })
+    if (!title) {
+        return res.status(400).json({ message: "Please provide a title to search for" })
     }
 
     try {
-        await addFilm({ title, synopsis, status, total_episodes, release_date })
+        const films = await searchFilmsByTitle(title)
+        res.status(200).json(films)
+    } catch (err) {
+        console.error("Error searching films by title:", err)
+        res.status(500).json({ message: "Internal server error" })
+    }
+}
+
+const addFilmController = async (req, res) => {
+    const { title, synopsis, status, total_episodes, release_date, genres } = req.body
+    const images = req.files
+
+    if (!title || !synopsis || !status || !total_episodes || !release_date || !genres || !Array.isArray(genres) || !images) {
+        return res.status(400).json({ message: "Please fill all fields, provide genres as an array of names, and images" })
+    }
+
+    try {
+        const filmId = await addFilm({ title, synopsis, status, total_episodes, release_date })
+
+        await addFilmImages(filmId, images)
 
         for (const genreName of genres) {
             const genreId = await getGenreByName(genreName)
@@ -64,6 +83,8 @@ const addFilmController = async (req, res) => {
             await addFilmGenre(filmId, genreId)
         }
 
+        await addFilmImages(filmId, images)
+
         res.status(201).json({ message: "Film added successfully" })
     } catch (err) {
         console.error("Database error:", err)
@@ -72,10 +93,11 @@ const addFilmController = async (req, res) => {
 }
 
 const updateFilmController = async (req, res) => {
-    const { id, title, synopsis, status, total_episodes, release_date } = req.body
+    const { id, title, synopsis, status, total_episodes, release_date, genres } = req.body
+    const images = req.files
 
-    if (!title || !synopsis || !status || !total_episodes || !release_date) {
-        return res.status(400).json({ message: "Please fill all fields" })
+    if (!title || !synopsis || !status || !total_episodes || !release_date || !Array.isArray(genres) || !images) {
+        return res.status(400).json({ message: "Please fill all fields, provide genres as an array of names, and images" })
     }
 
     try {
@@ -93,6 +115,10 @@ const updateFilmController = async (req, res) => {
                 genreId = await addGenre(genreName)
             }
             await addFilmGenre(id, genreId)
+        }
+
+        if (images) {
+            await updateFilmImages(filmId, images)
         }
 
         res.status(200).json({ message: "Film updated successfully" })
@@ -118,4 +144,4 @@ const deleteFilmController = async (req, res) => {
     }
 }
 
-module.exports = { getAllFilmsController, getFilmByIdController, getFilmsByGenreController, addFilmController, updateFilmController, deleteFilmController }
+module.exports = { getAllFilmsController, getFilmByIdController, getFilmsByGenreController, addFilmController, updateFilmController, deleteFilmController, searchFilmsByTitleController }

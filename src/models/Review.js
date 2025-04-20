@@ -122,4 +122,17 @@ const reactToReview = async ({ reviewId, userId, reaction }) => {
     }
 }
 
-module.exports = { addReview, updateReview, getReviewsByFilmId, reactToReview, isFilmInUserList, getFilmStatusInList }
+const deleteReview = async (reviewId, userId) => {
+    const pool = await poolPromise
+    const result = await pool.request()
+        .input("reviewId", reviewId)
+        .input("userId", userId)
+        .query(`
+            DELETE FROM reviews
+            WHERE id = @reviewId AND users_id = @userId
+        `)
+
+    return result.rowsAffected[0] > 0
+}
+
+module.exports = { addReview, updateReview, getReviewsByFilmId, reactToReview, isFilmInUserList, getFilmStatusInList, deleteReview }

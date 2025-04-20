@@ -85,4 +85,21 @@ const reactToReviewController = async (req, res) => {
     }
 }
 
-module.exports = { addReviewController, updateReviewController, getReviewsByFilmIdController, reactToReviewController }
+const deleteReviewController = async (req, res) => {
+    const { reviewId } = req.params
+    const userId = req.user.id // Extract user ID from the authenticated token
+
+    try {
+        const deleted = await deleteReview(reviewId, userId)
+        if (!deleted) {
+            return res.status(404).json({ message: "Review not found or not authorized to delete" })
+        }
+
+        res.status(200).json({ message: "Review deleted successfully" })
+    } catch (err) {
+        console.error("Error deleting review:", err)
+        res.status(500).json({ message: "Internal server error" })
+    }
+}
+
+module.exports = { addReviewController, updateReviewController, getReviewsByFilmIdController, reactToReviewController, deleteReviewController }

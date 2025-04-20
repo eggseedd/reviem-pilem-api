@@ -2,7 +2,10 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const dotenv = require('dotenv')
 const authRoutes = require('./routes/auth')
-const filmsRoutes = require('./routes/films')  
+const filmsRoutes = require('./routes/films')
+const genresRoutes = require('./routes/genres')
+const reviewsRoutes = require('./routes/reviews')  
+const userRoutes = require('./routes/user')
 
 dotenv.config()
 
@@ -18,5 +21,11 @@ app.get('/', (req, res) => {
 app.use('/auth', authRoutes)
 
 app.use('/films', filmsRoutes)
+
+app.use('/genres', genresRoutes)
+
+app.use('/reviews', reviewsRoutes)
+
+app.use('/user', userRoutes)
 
 module.exports = app
