@@ -1,4 +1,5 @@
 const { getUserProfile, updateUserProfile } = require("../models/User")
+const { getUserList } = require("../models/UserFilmList")
 
 const viewUserProfileController = async (req, res) => {
     const { userId } = req.params
@@ -9,6 +10,10 @@ const viewUserProfileController = async (req, res) => {
             return res.status(404).json({ message: "User not found" })
         }
 
+        const filmList = await getUserList(userId)
+        if (!filmList) {
+            filmList = []
+        }
         res.status(200).json({ profile, filmList })
     } catch (err) {
         console.error("Error fetching user profile:", err)

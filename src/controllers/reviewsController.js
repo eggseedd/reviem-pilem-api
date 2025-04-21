@@ -1,4 +1,4 @@
-const { addReview, updateReview, getReviewsByFilmId, reactToReview, isFilmInUserList, getFilmStatusInList } = require("../models/Review")
+const { addReview, updateReview, getReviewsByFilmId, reactToReview, isFilmInUserList, getFilmStatusInList, deleteReview } = require("../models/Review")
 
 const addReviewController = async (req, res) => {
     const { filmId } = req.params

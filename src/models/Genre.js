@@ -19,7 +19,7 @@ const addGenre = async (genre) => {
     const pool = await poolPromise
     const result = await pool.request()
         .input("name", name)
-        .query("INSERT INTO genres (name) VALUES (@name)")
+        .query("INSERT INTO genres (name) OUTPUT INSERTED.id VALUES (@name)")
     return result.recordset[0].id
 }
 
@@ -34,7 +34,7 @@ const updateGenre = async (id, name) => {
             WHERE id = @id
         `)
 
-    return result.rowsAffected[0] > 0 // Return true if a row was updated
+    return result.rowsAffected[0] > 0 
 }
 
 module.exports = { getAllGenres, getGenreByName, addGenre, updateGenre }
