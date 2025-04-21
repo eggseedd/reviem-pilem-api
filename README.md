@@ -6,7 +6,7 @@ An API for managing film reviews using Express.js and SQL Server. Features inclu
 review-pilem-api/
 ├── controllers/          # Route logic handlers
 ├── middlewares/          # Middleware (e.g., auth, validation)
-├── models/               # Sequelize models
+├── models/               # Models to interact with database
 ├── routes/               # API route definitions
 ├── utils/                # Utility functions
 ├── config/               # Configuration files
@@ -32,7 +32,6 @@ review-pilem-api/
   
   - Reactions — Like and Dislike functionality
 
-- Sequelize ORM with SQL Server support
 
 ## 🔧 Installation
 Clone the repository:
@@ -81,7 +80,5 @@ Role	Permissions
 - Node.js + Express.js
   
 - SQL Server (Database)
-  
-- Sequelize (ORM)
   
 - JWT (Authentication)
