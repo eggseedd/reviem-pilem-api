@@ -1,4 +1,4 @@
-const { getAllGenres, addGenre } = require("../models/Genre")
+const { getAllGenres, addGenre, updateGenre } = require("../models/Genre")
 
 const getAllGenresController = async (req, res) => {
     try {
@@ -25,8 +25,6 @@ const addGenreController = async (req, res) => {
         res.status(500).json({ message: "Internal server error" })
     }
 }
-
-const { updateGenre } = require("../models/Genre")
 
 const updateGenreController = async (req, res) => {
     const { id, name } = req.body

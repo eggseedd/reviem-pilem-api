@@ -1,4 +1,4 @@
-const { ggetAllFilms, getFilmById, getFilmsByGenre, addFilm, updateFilm, deleteFilm, addFilmImages, searchFilmsByTitle, deleteFilmImages } = require("../models/Film")
+const { getAllFilms, getFilmById, getFilmsByGenre, addFilm, updateFilm, deleteFilm, addFilmImages, searchFilmsByTitle, deleteFilmImages } = require("../models/Film")
 const { getGenreByName, addGenre } = require("../models/Genre")
 const { addFilmGenre, deleteFilmGenres } = require("../models/FilmGenre")
 
