@@ -4,13 +4,14 @@ An API for managing film reviews using Express.js and SQL Server. Features inclu
 ## 📁 Project Structure
 ```
 review-pilem-api/
-├── controllers/          # Route logic handlers
-├── middlewares/          # Middleware (e.g., auth, validation)
-├── models/               # Models to interact with database
-├── routes/               # API route definitions
-├── utils/                # Utility functions
-├── config/               # Configuration files
-├── app.js                # Entry point of the application
+├── src/
+  ├── config/               # Handling database connection
+  ├── controllers/          # Route logic handlers
+  ├── middlewares/          # Middleware (e.g., auth, validation)
+  ├── models/               # Models to interact with database
+  ├── routes/               # API route definitions
+  ├── db/                   # Contains database seeder file
+  └── app.js                # Entry point of the application
 ├── .env.example          # Example environment variables
 └── README.md             # Project documentation
 ```
