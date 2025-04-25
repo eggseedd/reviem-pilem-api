@@ -37,7 +37,7 @@ review-pilem-api/
 Clone the repository:
 
 ```
-git clone https://github.com/yourusername/review-pilem-api.git
+git clone https://github.com/eggseedd/review-pilem-api.git
 cd review-pilem-api
 ```
 Install dependencies:
