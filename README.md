@@ -54,7 +54,7 @@ cp .env.example .env
 Run the server:
 
 ```
-npm run dev
+npm run devStart
 ```
 ## 🗂️ CDM (Conceptual Data Model)
 ![ReviewPilem_Physical_Export-2025-04-25_08-55](https://github.com/user-attachments/assets/cca18a7f-c321-43ed-a2db-2f3858ea26d6)
